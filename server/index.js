@@ -9,6 +9,7 @@ import projectRoutes from './src/routes/projectRoutes.js';
 import messageRoutes from './src/routes/messageRoutes.js';
 import blogRoutes from './src/routes/blogRoutes.js';
 
+
 // Configuración de variables de entorno
 dotenv.config();
 
@@ -17,14 +18,27 @@ connectDB();
 
 const app = express();
 
+const whiteList = [
+  "http://localhost:5173", // Para que funcione en tu PC
+  "https://nexora-tech-36tz2519u-andresvidesbs-projects.vercel.app", // <--- ESTA ES LA URL DEL ERROR QUE TE DIO
+  "https://nexora-tech.vercel.app" // (Opcional) Agrega también tu URL principal de Vercel si tienes una más corta
+];
+
 // ... (El resto de tu código de middlewares sigue igual) ...
 
 app.use(express.json());
 app.use(cookieParser());
 app.use(morgan('dev'));
 app.use(cors({
-    origin: ['http://localhost:5173', 'http://127.0.0.1:5173'], 
-    credentials: true
+  origin: function (origin, callback) {
+    // Permitir peticiones sin origen (como Postman o Apps móviles) o si está en la lista
+    if (!origin || whiteList.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Bloqueado por CORS: ' + origin));
+    }
+  },
+  credentials: true // ¡Vital para que funcionen las cookies/sesiones!
 }));
 
 // Rutas
