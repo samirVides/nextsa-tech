@@ -20,7 +20,8 @@ const app = express();
 
 const whiteList = [
   "http://localhost:5173", // Para que funcione en tu PC
-  "https://nexora-tech-36tz2519u-andresvidesbs-projects.vercel.app", // <--- ESTA ES LA URL DEL ERROR QUE TE DIO
+  "https://nexora-tech-36tz2519u-andresvidesbs-projects.vercel.app", 
+  "https://nexora-tech-eight.vercel.app",// <--- ESTA ES LA URL DEL ERROR QUE TE DIO
   "https://nexora-tech.vercel.app" // (Opcional) Agrega también tu URL principal de Vercel si tienes una más corta
 ];
 
