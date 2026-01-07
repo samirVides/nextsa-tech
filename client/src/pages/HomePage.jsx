@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { 
   FaWhatsapp, FaEnvelope, FaPaperPlane, 
-  FaFacebook, FaInstagram, FaTiktok 
+  FaFacebook, FaInstagram, FaTiktok, FaHandHoldingUsd, FaTools, FaHandshake
 } from 'react-icons/fa';
 import api from '../api';
 import ProjectCard from '../components/ProjectCard';
@@ -10,6 +10,7 @@ import DigitalGlobe from '../components/DigitalGlobe';
 import Navbar from '../components/Navbar';
 import WhatsAppBtn from '../components/WhatsAppBtn'; 
 import FaqSection from '../components/FaqSection';
+
 
 const HomePage = () => {
   const [projects, setProjects] = useState([]);
@@ -60,7 +61,7 @@ const HomePage = () => {
         <div className="comet comet-3"></div>
       </div>
 
-      {/* HERO SECTION (PLANETA 3D) */}
+    
       {/* Hero Section CON GLOBO 3D */}
       <header className="relative pt-32 pb-32 text-center px-4 flex flex-col items-center overflow-hidden">
         
@@ -71,7 +72,7 @@ const HomePage = () => {
         <div className="relative z-10 flex flex-col items-center max-w-5xl mx-auto">
             
             <div className="inline-block mb-6 px-6 py-2 rounded-full bg-blue-900/30 border border-blue-500/30 text-blue-300 text-sm font-semibold animate-pulse backdrop-blur-md shadow-[0_0_15px_rgba(59,130,246,0.4)]">
-              🤝 Tu Socio Tecnológico de Confianza
+              Tu Socio Tecnológico de Confianza
             </div>
 
             <h1 className="text-5xl md:text-7xl font-extrabold mb-6 tracking-tight leading-tight drop-shadow-2xl">
@@ -93,28 +94,38 @@ const HomePage = () => {
             </div>
 
             {/* Tarjetas de Beneficios (TEXTOS MEJORADOS) */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 w-full">
+            {/* Tarjetas de Beneficios (DISEÑO PROFESIONAL CON ICONOS SVG) */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 w-full relative z-20">
                 
-                {/* Tarjeta 1 */}
-                <div className="bg-slate-900/80 p-6 rounded-xl border border-green-500/40 flex flex-col items-center hover:scale-105 transition shadow-lg shadow-green-900/20">
-                    <span className="text-3xl mb-3">💸</span>
-                    <h3 className="font-bold text-green-400 text-lg mb-1">Aporte Voluntario</h3>
+                {/* Tarjeta 1 - Verde */}
+                <div className="bg-slate-900/80 p-6 rounded-xl border border-green-500/40 flex flex-col items-center hover:scale-105 transition shadow-lg shadow-green-900/20 group">
+                    {/* Nuevo Contenedor de Icono */}
+                    <div className="mb-4 p-4 rounded-full bg-gradient-to-br from-green-500/20 to-green-900/30 border border-green-400/50 shadow-[0_0_15px_rgba(34,197,94,0.3)] group-hover:shadow-[0_0_25px_rgba(34,197,94,0.5)] transition-all">
+                        <FaHandHoldingUsd className="text-3xl text-green-400" />
+                    </div>
+                    <h3 className="font-bold text-green-400 text-lg mb-2">Aporte Voluntario</h3>
                     <p className="text-sm text-slate-300">Pagas lo que consideres justo por mi trabajo de desarrollo inicial.</p>
                 </div>
 
-                {/* Tarjeta 2 - CAMBIADA: LENGUAJE MÁS SENCILLO */}
-                <div className="bg-slate-900/80 p-6 rounded-xl border border-blue-500/40 flex flex-col items-center hover:scale-105 transition shadow-lg shadow-blue-900/20">
-                    <span className="text-3xl mb-3">🛠️</span>
-                    <h3 className="font-bold text-blue-400 text-lg mb-1">Te Ayudo en Todo</h3>
+                {/* Tarjeta 2 - Azul */}
+                <div className="bg-slate-900/80 p-6 rounded-xl border border-blue-500/40 flex flex-col items-center hover:scale-105 transition shadow-lg shadow-blue-900/20 group">
+                     {/* Nuevo Contenedor de Icono */}
+                    <div className="mb-4 p-4 rounded-full bg-gradient-to-br from-blue-500/20 to-blue-900/30 border border-blue-400/50 shadow-[0_0_15px_rgba(59,130,246,0.3)] group-hover:shadow-[0_0_25px_rgba(59,130,246,0.5)] transition-all">
+                        <FaTools className="text-3xl text-blue-400" />
+                    </div>
+                    <h3 className="font-bold text-blue-400 text-lg mb-2">Te Ayudo en Todo</h3>
                     <p className="text-sm text-slate-300">
-                      ¿No sabes de tecnología? Tranquilo. Yo me encargo de configurar tu nombre en internet para que sea 100% tuyo.
+                      Tranquilo. Yo me encargo de la configuración técnica del hosting y dominio.
                     </p>
                 </div>
 
-                {/* Tarjeta 3 */}
-                <div className="bg-slate-900/80 p-6 rounded-xl border border-purple-500/40 flex flex-col items-center hover:scale-105 transition shadow-lg shadow-purple-900/20">
-                    <span className="text-3xl mb-3">🤝</span>
-                    <h3 className="font-bold text-purple-400 text-lg mb-1">Ganamos Todos</h3>
+                {/* Tarjeta 3 - Púrpura */}
+                <div className="bg-slate-900/80 p-6 rounded-xl border border-purple-500/40 flex flex-col items-center hover:scale-105 transition shadow-lg shadow-purple-900/20 group">
+                     {/* Nuevo Contenedor de Icono */}
+                    <div className="mb-4 p-4 rounded-full bg-gradient-to-br from-purple-500/20 to-purple-900/30 border border-purple-400/50 shadow-[0_0_15px_rgba(168,85,247,0.3)] group-hover:shadow-[0_0_25px_rgba(168,85,247,0.5)] transition-all">
+                        <FaHandshake className="text-3xl text-purple-400" />
+                    </div>
+                    <h3 className="font-bold text-purple-400 text-lg mb-2">Ganamos Todos</h3>
                     <p className="text-sm text-slate-300">Busco una relación a largo plazo: mejoras, mantenimiento y tus referidos.</p>
                 </div>
             </div>
