@@ -99,12 +99,14 @@ const HomePage = () => {
                 
                 {/* Tarjeta 1 - Verde */}
                 <div className="bg-slate-900/80 p-6 rounded-xl border border-green-500/40 flex flex-col items-center hover:scale-105 transition shadow-lg shadow-green-900/20 group">
-                    {/* Nuevo Contenedor de Icono */}
                     <div className="mb-4 p-4 rounded-full bg-gradient-to-br from-green-500/20 to-green-900/30 border border-green-400/50 shadow-[0_0_15px_rgba(34,197,94,0.3)] group-hover:shadow-[0_0_25px_rgba(34,197,94,0.5)] transition-all">
                         <FaHandHoldingUsd className="text-3xl text-green-400" />
                     </div>
-                    <h3 className="font-bold text-green-400 text-lg mb-2">Aporte Voluntario</h3>
-                    <p className="text-sm text-slate-300">Pagas lo que consideres justo por mi trabajo de desarrollo inicial.</p>
+                    {/* 👇 AQUÍ ESTÁ EL CAMBIO DE TEXTO */}
+                    <h3 className="font-bold text-green-400 text-lg mb-2">A Precio de un Café</h3>
+                    <p className="text-sm text-slate-300">
+                        Literalmente. Obtienes calidad de agencia por un valor simbólico. No busco hacerme rico (aún), busco casos de éxito para mi portafolio.
+                    </p>
                 </div>
 
                 {/* Tarjeta 2 - Azul */}
