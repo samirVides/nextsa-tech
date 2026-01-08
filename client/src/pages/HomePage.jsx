@@ -103,9 +103,9 @@ const HomePage = () => {
                         <FaHandHoldingUsd className="text-3xl text-green-400" />
                     </div>
                     {/* 👇 AQUÍ ESTÁ EL CAMBIO DE TEXTO */}
-                    <h3 className="font-bold text-green-400 text-lg mb-2">A Precio de un Café</h3>
+                    <h3 className="font-bold text-green-400 text-lg mb-2">Al mejor precio</h3>
                     <p className="text-sm text-slate-300">
-                        Literalmente. Obtienes calidad de agencia por un valor simbólico. No busco hacerme rico (aún), busco casos de éxito para mi portafolio.
+                        Literalmente. Obtienes calidad de agencia por un valor simbólico. Busco casos de éxito para mi portafolio.
                     </p>
                 </div>
 
