@@ -25,7 +25,7 @@ const Navbar = () => {
         {/* 2. El Texto (Logotipo) */}
         <div className="flex flex-col leading-none">
             <span className="text-lg font-extrabold tracking-widest bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-400 to-white group-hover:to-blue-400 transition-all">
-                NEXORA
+                NEXTSA
             </span>
             <span className="text-[10px] font-bold text-slate-400 tracking-[0.3em] group-hover:text-white transition-colors">
                 TECH
