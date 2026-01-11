@@ -108,6 +108,7 @@ const BlogDetailsPage = () => {
         <img 
           src={getUrl(post.image)} 
           alt={post.title} 
+          loading="lazy"
           className="w-full h-full object-cover fixed-bg"
         />
 
@@ -215,6 +216,7 @@ const BlogDetailsPage = () => {
                                               <img 
                                                 src={getUrl(item.url)} 
                                                 alt={item.title || `Imagen ${idx + 1}`}
+                                                loading="lazy"
                                                 className="w-full h-auto max-h-[500px] object-cover object-center group-hover:scale-[1.02] transition duration-700 block" 
                                               />
                                               <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-white border border-white/20">

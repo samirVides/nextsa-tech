@@ -114,7 +114,7 @@ const ProjectDetailsPage = () => {
                                 onClick={() => setSelectedImage(item.url)}
                               >
                                   <div className="rounded-xl overflow-hidden shadow-2xl shadow-blue-900/20 border border-slate-800 transition duration-500 transform group-hover:scale-[1.02]">
-                                      <img src={item.url} alt={item.title} className="w-full h-auto object-cover" />
+                                      <img src={item.url} alt={item.title} loading="lazy" className="w-full h-auto object-cover" />
                                       
                                       {/* Overlay de "Ver más" al pasar el mouse */}
                                       <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center backdrop-blur-sm">
@@ -166,6 +166,7 @@ const ProjectDetailsPage = () => {
             <img 
                 src={selectedImage} 
                 alt="Zoom" 
+                loading="lazy"
                 className="max-h-[90vh] max-w-[95vw] rounded-lg shadow-2xl border border-slate-700 object-contain animate-in fade-in zoom-in duration-300"
                 onClick={(e) => e.stopPropagation()} // Evita que se cierre si tocas la foto
             />

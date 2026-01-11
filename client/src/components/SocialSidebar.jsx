@@ -10,13 +10,13 @@ const SocialSidebar = () => {
         <div className="bg-slate-900/90 backdrop-blur-md border border-slate-700 p-4 rounded-r-xl shadow-[0_0_20px_rgba(59,130,246,0.3)] 
                         transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300 ease-out flex flex-col gap-6 relative z-20">
           
-          <a href="https://instagram.com" target="_blank" rel="noreferrer" className="text-pink-500 hover:text-pink-400 text-2xl transition hover:scale-110">
+          <a href="https://www.instagram.com/nextsatech/" target="_blank" rel="noreferrer" className="text-pink-500 hover:text-pink-400 text-2xl transition hover:scale-110">
             <FaInstagram />
           </a>
-          <a href="https://facebook.com" target="_blank" rel="noreferrer" className="text-blue-500 hover:text-blue-400 text-2xl transition hover:scale-110">
+          <a href="https://www.facebook.com/share/1BqjHqE48s/" target="_blank" rel="noreferrer" className="text-blue-500 hover:text-blue-400 text-2xl transition hover:scale-110">
             <FaFacebook />
           </a>
-          <a href="https://tiktok.com" target="_blank" rel="noreferrer" className="text-white hover:text-gray-300 text-2xl transition hover:scale-110">
+          <a href="https://www.tiktok.com/@nextsatech" target="_blank" rel="noreferrer" className="text-white hover:text-gray-300 text-2xl transition hover:scale-110">
             <FaTiktok />
           </a>
         </div>

@@ -60,10 +60,10 @@ const Footer = () => {
                     Transformamos el futuro digital. Desarrollo de software de alto impacto para empresas que buscan escalar.
                 </p>
                 <div className="flex gap-3">
-                    <SocialLink icon={<FaFacebookF />} href="#" color="hover:text-blue-500" />
-                    <SocialLink icon={<FaInstagram />} href="#" color="hover:text-pink-500" />
+                    <SocialLink icon={<FaFacebookF />} href="https://www.facebook.com/share/1BqjHqE48s/" color="hover:text-blue-500" />
+                    <SocialLink icon={<FaInstagram />} href="https://www.instagram.com/nextsatech/" color="hover:text-pink-500" />
                     <SocialLink icon={<FaLinkedinIn />} href="#" color="hover:text-blue-400" />
-                    <SocialLink icon={<FaTiktok />} href="#" color="hover:text-white" />
+                    <SocialLink icon={<FaTiktok />} href="https://www.tiktok.com/@nextsatech" color="hover:text-white" />
                 </div>
             </div>
 

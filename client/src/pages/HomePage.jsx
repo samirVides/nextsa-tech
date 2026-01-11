@@ -1,5 +1,5 @@
-import { useEffect, useState, useRef, useMemo } from 'react';
-import Globe from 'react-globe.gl'; 
+import React, { useEffect, useState, useRef, useMemo, lazy, Suspense } from 'react';
+
 import { Link } from 'react-router-dom';
 import { 
   FaWhatsapp, FaEnvelope, FaPaperPlane, 
@@ -13,6 +13,9 @@ import WhatsAppBtn from '../components/WhatsAppBtn';
 import FaqSection from '../components/FaqSection';
 import SocialMedia from '../components/SocialSidebar';
 
+// Antes de la función HomePage
+const Globe = React.lazy(() => import('react-globe.gl'));
+
 const HomePage = () => {
   const [projects, setProjects] = useState([]);
   const [blogs, setBlogs] = useState([]); 
@@ -20,7 +23,7 @@ const HomePage = () => {
   const [msgStatus, setMsgStatus] = useState(null);
   const globeEl = useRef(); 
 
-  // --- DATOS DEL GLOBO ---
+  // --- DATOS DEL GLOBO (Mantener igual) ---
   const gData = useMemo(() => {
     const N = 30; 
     return [...Array(N).keys()].map(() => ({
@@ -37,33 +40,26 @@ const HomePage = () => {
   })), []);
 
   useEffect(() => {
-    // Cargar Proyectos
     const fetchProjects = async () => {
-      try {
-        const { data } = await api.get('/api/projects');
-        setProjects(data);
-      } catch (error) { console.error("Error proyectos", error); }
+      try { const { data } = await api.get('/api/projects'); setProjects(data); } catch (error) { console.error(error); }
     };
-    
-    // Cargar Blogs
     const fetchBlogs = async () => {
-      try {
-        const { data } = await api.get('/api/blogs');
-        setBlogs(data.slice(0, 3)); // Solo tomamos los últimos 3
-      } catch (error) { console.error("Error blogs", error); }
+      try { const { data } = await api.get('/api/blogs'); setBlogs(data.slice(0, 3)); } catch (error) { console.error(error); }
     };
-
     fetchProjects();
     fetchBlogs();
   }, []);
 
-  useEffect(() => {
+
+useEffect(() => {
+    // Solo ejecutamos si globeEl.current existe (cuando Suspense termine)
     if (globeEl.current) {
       globeEl.current.controls().autoRotate = true;
       globeEl.current.controls().autoRotateSpeed = 0.8;
       globeEl.current.pointOfView({ lat: 20, lng: -70, altitude: 2.5 }); 
     }
-  }, []);
+  }, [projects]); // Dependencia para re-intentar cuando cargue
+
 
   const handleMessageSubmit = async (e) => {
     e.preventDefault();
@@ -75,16 +71,12 @@ const HomePage = () => {
     } catch (error) { setMsgStatus('error'); }
   };
 
-  const handleDeleteProject = async (id) => {
-    if (!window.confirm('¿Estás seguro de que deseas eliminar este proyecto permanentemente?')) return;
-
+const handleDeleteProject = async (id) => {
+    if (!window.confirm('¿Eliminar proyecto?')) return;
     try {
         await api.delete(`/api/projects/${id}`);
         setProjects(projects.filter(p => p._id !== id));
-    } catch (error) {
-        console.error("Error eliminando proyecto:", error);
-        alert('Hubo un error al intentar eliminar el proyecto.');
-    }
+    } catch (error) { console.error(error); }
   };
 
   // --- FUNCIÓN PARA LIMPIAR HTML ---
@@ -106,7 +98,6 @@ const HomePage = () => {
         <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-600/10 blur-[120px] rounded-full"></div>
       </div>
 
-      {/* HERO SECTION */}
       <section className="relative pt-32 pb-12 px-6 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center min-h-[85vh]">
         <div className="flex flex-col gap-6 z-10 animate-fade-in-left order-2 lg:order-1">
             <div className="inline-block px-4 py-1 rounded-full bg-blue-900/30 border border-blue-500/30 w-fit">
@@ -124,11 +115,42 @@ const HomePage = () => {
                 <a href="#proyectos" className="px-8 py-3 border border-slate-600 hover:border-white text-slate-300 hover:text-white rounded-xl font-bold transition">Ver Portafolio</a>
             </div>
         </div>
+
+        {/* CONTENEDOR DEL GLOBO CON OPTIMIZACIÓN */}
         <div className="relative h-[350px] md:h-[500px] w-full flex items-center justify-center animate-fade-in-right order-1 lg:order-2">
             <div className="relative w-full h-full bg-slate-900/40 backdrop-blur-sm border border-slate-700/50 rounded-3xl overflow-hidden shadow-2xl shadow-blue-900/20 group">
                 <div className="absolute top-4 right-4 text-xs text-blue-500 font-mono border border-blue-500/30 px-2 py-1 rounded z-20 bg-slate-900/80">NET.STATUS: ONLINE</div>
+                
                 <div className="cursor-move w-full h-full flex items-center justify-center opacity-90 hover:opacity-100 transition duration-500">
-                    <Globe ref={globeEl} width={600} height={600} backgroundColor="rgba(0,0,0,0)" globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg" atmosphereColor="#3b82f6" atmosphereAltitude={0.2} arcsData={gData} arcColor={'color'} arcDashLength={0.9} arcDashGap={4} arcDashAnimateTime={1000} arcStroke={0.5} ringsData={ringsData} ringColor={() => t => `rgba(59,130,246,${1-t})`} ringMaxRadius={5} ringPropagationSpeed={2} ringRepeatPeriod={800} enableZoom={false} />
+                    {/* 2. SUSPENSE PARA EL GLOBO */}
+                    <React.Suspense fallback={
+                      <div className="flex items-center justify-center w-full h-full">
+                         {/* Círculo de carga que imita al globo mientras descarga el JS */}
+                         <div className="w-64 h-64 rounded-full border-4 border-blue-500/20 border-t-blue-500 animate-spin"></div>
+                      </div>
+                    }>
+                        <Globe 
+                          ref={globeEl} 
+                          width={600} 
+                          height={600} 
+                          backgroundColor="rgba(0,0,0,0)" 
+                          globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg" 
+                          atmosphereColor="#3b82f6" 
+                          atmosphereAltitude={0.2} 
+                          arcsData={gData} 
+                          arcColor={'color'} 
+                          arcDashLength={0.9} 
+                          arcDashGap={4} 
+                          arcDashAnimateTime={1000} 
+                          arcStroke={0.5} 
+                          ringsData={ringsData} 
+                          ringColor={() => t => `rgba(59,130,246,${1-t})`} 
+                          ringMaxRadius={5} 
+                          ringPropagationSpeed={2} 
+                          ringRepeatPeriod={800} 
+                          enableZoom={false} 
+                        />
+                    </React.Suspense>
                 </div>
             </div>
         </div>
@@ -237,6 +259,7 @@ const HomePage = () => {
                              <img 
                                 src={blog.image?.startsWith('http') ? blog.image : `http://localhost:4000/${blog.image}`} 
                                 alt={blog.title} 
+                                loading="lazy"
                                 className="w-full h-full object-cover transform group-hover:scale-110 transition duration-500" 
                              />
                         </div>

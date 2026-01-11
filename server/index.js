@@ -11,7 +11,7 @@ import projectRoutes from './src/routes/projectRoutes.js';
 import messageRoutes from './src/routes/messageRoutes.js';
 import blogRoutes from './src/routes/blogRoutes.js';
 import newsletterRoutes from './src/routes/newsletterRoutes.js';
-
+import helmet from 'helmet';
 // Configuración de variables de entorno
 dotenv.config();
 
@@ -23,6 +23,17 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      // Permitimos unsafe-inline porque SweetAlert y Globe lo necesitan para inyectar estilos/HTML
+      scriptSrc: ["'self'", "'unsafe-inline'", "https://unpkg.com"],
+      imgSrc: ["'self'", "data:", "https://unpkg.com", "https://res.cloudinary.com", "http://localhost:4000"],
+      connectSrc: ["'self'", "http://localhost:4000", "https://unpkg.com"],
+    },
+  },
+}));
 
 const whiteList = [
   "http://localhost:5173", 

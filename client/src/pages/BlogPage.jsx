@@ -108,6 +108,7 @@ const BlogPage = () => {
                                         <img 
                                             src={post.image} 
                                             alt={post.title} 
+                                            loading="lazy"
                                             className="w-full h-full object-cover transform group-hover:scale-110 transition duration-700" 
                                         />
                                       </>
