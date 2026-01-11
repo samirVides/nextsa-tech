@@ -8,9 +8,9 @@ import { HelmetProvider } from 'react-helmet-async';
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <HelmetProvider>
-      <AuthProvider>   {/* <--- ¿Tienes esta etiqueta envolviendo a App? */}
+        {/* <--- ¿Tienes esta etiqueta envolviendo a App? */}
         <App />
-      </AuthProvider>
+      
     </HelmetProvider>
   </React.StrictMode>,
 )

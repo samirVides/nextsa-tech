@@ -1,19 +1,24 @@
 import express from 'express';
-import { getProjects, createProject, deleteProject, updateProject } from '../controllers/projectController.js';
-import { protect, adminOnly } from '../middlewares/authMiddleware.js';
-import upload from '../config/cloudinary.js';
+// 👇 AQUÍ FALTABA AGREGAR 'updateProject'
+import { getProjects, getProjectById, createProject, updateProject, deleteProject } from '../controllers/projectController.js';
+import { protect, admin } from '../middlewares/authMiddleware.js';
+import upload from '../middlewares/uploadMiddleware.js';
 
 const router = express.Router();
 
-// Ruta raíz (/api/projects)
 router.route('/')
-    .get(getProjects) // Cualquiera puede ver
-    //.post(protect, adminOnly, createProject); // Solo Admin puede crear
-    .post(protect, adminOnly, upload.single('image'), createProject);
+  .get(getProjects)
+  .post(protect, admin, upload.fields([
+      { name: 'image', maxCount: 1 },
+      { name: 'galleryImages', maxCount: 10 }
+  ]), createProject);
 
-// Ruta con ID (/api/projects/:id)
 router.route('/:id')
-.put(protect, adminOnly, upload.single('image'), updateProject)
-    .delete(protect, adminOnly, deleteProject); // Solo Admin puede borrar
+  .get(getProjectById)
+  .put(protect, admin, upload.fields([
+      { name: 'image', maxCount: 1 },
+      { name: 'galleryImages', maxCount: 10 }
+  ]), updateProject) // Ahora sí funcionará porque ya lo importamos arriba
+  .delete(protect, admin, deleteProject);
 
 export default router;

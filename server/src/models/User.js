@@ -7,7 +7,14 @@ const userSchema = mongoose.Schema({
     password: { type: String, required: true },
     role: { type: String, default: 'user' },
     resetPasswordToken: String,
-    resetPasswordExpire: Date
+    resetPasswordExpire: Date,
+
+    isVerified: { type: Boolean, default: false }, // Por defecto NO está verificado
+    verificationToken: { type: String },
+    newsletterSubscribed: { 
+        type: Boolean, 
+        default: true // Por defecto TRUE, ya que lo aceptarán al registrarse
+    },
 }, {
     timestamps: true
 });

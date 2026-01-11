@@ -1,39 +1,29 @@
 import mongoose from 'mongoose';
 
 const projectSchema = mongoose.Schema({
-  title: {
-    type: String,
-    required: true,
-  },
-  description: {
-    type: String,
-    required: true,
-  },
-  image: { 
-    type: String, 
-    required: true // Esta será la "Portada" principal del proyecto
-  },
-  link: {
-    type: String,
-    required: true,
-  },
-  // 👇 AQUÍ ESTÁ LO NUEVO: GALERÍA DE DETALLES
+  title: { type: String, required: true },
+  description: { type: String, required: true },
+  image: { type: String, required: true }, // Imagen principal
+  link: { type: String, required: true },
+  
+  // 👇 ESTO ES LO QUE FALTA ACTUALIZAR PARA QUE RECIBA LA GALERÍA
   gallery: [
     {
-        url: { type: String },         // URL de la imagen extra
-        title: { type: String },       // Título de esa sección (ej: "Panel de Admin")
-        description: { type: String }  // Descripción detallada de esa imagen
+        url: { type: String },
+        title: { type: String },
+        description: { type: String }
     }
   ],
+  
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,
   },
+  technologies: { type: Array } // (Opcional si lo sigues usando)
 }, {
   timestamps: true,
 });
 
 const Project = mongoose.model('Project', projectSchema);
-
 export default Project;

@@ -1,36 +1,49 @@
 import express from 'express';
+
+// 1. Importamos la AUTENTICACIÓN desde authController
 import { 
     authUser, 
     registerUser, 
     logoutUser, 
-    getUserProfile,
+    verifyEmail,
     forgotPassword, 
-    resetPassword,
-    getUsers,      // <--- Importar
-    deleteUser,    // <--- Importar
-    getUserById,   // <--- Importar
-    updateUser     // <--- Importar
+    resetPassword 
+} from '../controllers/authController.js';
+
+// 2. Importamos la GESTIÓN DE USUARIOS desde userController
+import { 
+    getUserProfile, 
+    updateUserProfile, 
+    getUsers, 
+    deleteUser, 
+    getUserById, 
+    updateUser 
 } from '../controllers/userController.js';
-import { protect, adminOnly } from '../middlewares/authMiddleware.js';
+
+import { protect, admin } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
-// Ruta Raíz (/api/users)
-router.route('/')
-    .post(registerUser) // Registro público
-    .get(protect, adminOnly, getUsers); // Ver lista (Solo Admin)
-
-// Rutas de Sesión
+// --- RUTAS PÚBLICAS (Auth) ---
+router.post('/register', registerUser);
 router.post('/login', authUser);
 router.post('/logout', logoutUser);
+router.get('/verify/:token', verifyEmail);
 router.post('/forgotpassword', forgotPassword);
 router.put('/resetpassword/:resetToken', resetPassword);
-router.route('/profile').get(protect, getUserProfile);
 
-// Rutas de Gestión de Usuarios por ID (Solo Admin)
+// --- RUTAS PRIVADAS (Perfil) ---
+router.route('/profile')
+    .get(protect, getUserProfile)
+    .put(protect, updateUserProfile);
+
+// --- RUTAS DE ADMIN ---
+router.route('/')
+    .get(protect, admin, getUsers);
+
 router.route('/:id')
-    .delete(protect, adminOnly, deleteUser)
-    .get(protect, adminOnly, getUserById)
-    .put(protect, adminOnly, updateUser);
+    .delete(protect, admin, deleteUser)
+    .get(protect, admin, getUserById)
+    .put(protect, admin, updateUser);
 
 export default router;

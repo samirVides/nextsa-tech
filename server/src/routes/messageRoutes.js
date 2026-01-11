@@ -1,6 +1,6 @@
 import express from 'express';
 import Message from '../models/Message.js';
-import { protect, adminOnly } from '../middlewares/authMiddleware.js'; // <--- IMPORTAR SEGURIDAD
+import { protect, admin } from '../middlewares/authMiddleware.js'; // <--- IMPORTAR SEGURIDAD
 
 const router = express.Router();
 
@@ -16,7 +16,7 @@ router.post('/', async (req, res) => {
 });
 
 // 2. Leer todos los mensajes (Solo Admin)
-router.get('/', protect, adminOnly, async (req, res) => {
+router.get('/', protect, admin, async (req, res) => {
     try {
         const messages = await Message.find({}).sort({ createdAt: -1 }); // Los nuevos primero
         res.json(messages);
@@ -26,7 +26,7 @@ router.get('/', protect, adminOnly, async (req, res) => {
 });
 
 // 3. Borrar mensaje (Solo Admin)
-router.delete('/:id', protect, adminOnly, async (req, res) => {
+router.delete('/:id', protect, admin, async (req, res) => {
     try {
         const message = await Message.findById(req.params.id);
         if (message) {

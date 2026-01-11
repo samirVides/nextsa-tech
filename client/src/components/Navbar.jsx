@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
-import { FaBars, FaTimes, FaUsers, FaConnectdevelop } from 'react-icons/fa'; // <--- Agregamos el ícono del logo
+import { FaBars, FaTimes, FaConnectdevelop, FaChartPie, FaSignOutAlt } from 'react-icons/fa';
 
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
@@ -13,16 +13,14 @@ const Navbar = () => {
   const linkClass = "px-3 py-2 rounded-lg transition font-medium text-sm";
 
   return (
-    <nav className="fixed w-full px-6 py-3 flex justify-between items-center z-50 glass border-b border-cyan-500/10 backdrop-blur-xl bg-slate-950/50">
+    <nav className="fixed w-full px-6 py-3 flex justify-between items-center z-50 glass border-b border-cyan-500/10 backdrop-blur-xl bg-slate-950/80">
       
-      {/* --- LOGO TIPO MARCA DE AGENCIA --- */}
+      {/* --- LOGO --- */}
       <Link to="/" className="flex items-center gap-3 group">
-        {/* 1. El Ícono (Isotipo) */}
         <div className="w-10 h-10 bg-gradient-to-br from-slate-800 to-slate-900 rounded-lg flex items-center justify-center border border-blue-500/30 shadow-[0_0_15px_rgba(59,130,246,0.2)] group-hover:shadow-[0_0_25px_rgba(59,130,246,0.6)] group-hover:border-blue-400 transition-all duration-300 transform group-hover:rotate-180">
             <FaConnectdevelop className="text-2xl text-blue-400 group-hover:text-white transition-colors duration-300" />
         </div>
         
-        {/* 2. El Texto (Logotipo) */}
         <div className="flex flex-col leading-none">
             <span className="text-lg font-extrabold tracking-widest bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-400 to-white group-hover:to-blue-400 transition-all">
                 NEXTSA
@@ -33,37 +31,38 @@ const Navbar = () => {
         </div>
       </Link>
       
-      {/* Menú Escritorio */}
+      {/* --- MENÚ ESCRITORIO --- */}
       <div className="hidden md:flex items-center gap-2">
         <Link to="/" className={`${isActive('/')} ${linkClass}`}>Inicio</Link>
+        <Link to="/projects" className={`${isActive('/projects')} ${linkClass}`}>Proyectos</Link>
         <Link to="/about" className={`${isActive('/about')} ${linkClass}`}>Nosotros</Link>
         <Link to="/blog" className={`${isActive('/blog')} ${linkClass}`}>Blog</Link>
-
+        
         {user ? (
           <div className="flex items-center gap-3 border-l border-slate-700 pl-4 ml-2">
+            
+            {/* Info Usuario */}
             <div className="text-right hidden lg:block">
                 <p className="text-xs text-slate-400">Hola,</p>
-                <p className="text-sm font-bold text-blue-400 leading-none">{user.name}</p>
+                <p className="text-sm font-bold text-blue-400 leading-none">{user.name?.split(' ')[0]}</p>
             </div>
             
+            {/* 👇 EL ÚNICO BOTÓN DE ADMIN (LIMPIO) */}
             {user.role === 'admin' && (
-              <div className="flex gap-2">
-                <Link to="/admin/users" className="p-2 bg-slate-800 hover:bg-blue-600 border border-slate-700 hover:border-blue-500 rounded text-white transition" title="Usuarios">
-                    <FaUsers />
-                </Link>
-                <Link to="/admin/new" className="px-3 py-2 bg-green-600/20 text-green-400 border border-green-500/30 hover:bg-green-600 hover:text-white rounded text-xs font-bold transition">
-                    + Proy
-                </Link>
-                <Link to="/admin/blog/new" className="px-3 py-2 bg-purple-600/20 text-purple-400 border border-purple-500/30 hover:bg-purple-600 hover:text-white rounded text-xs font-bold transition">
-                    + Blog
-                </Link>
-                <Link to="/admin/messages" className="p-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded text-white transition">
-                    📩
-                </Link>
-              </div>
+              <Link 
+                to="/admin" 
+                className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-bold text-xs uppercase tracking-wide shadow-lg shadow-blue-600/20 transition-all hover:scale-105"
+              >
+                 <FaChartPie /> Dashboard
+              </Link>
             )}
-            <button onClick={logout} className="px-4 py-2 text-xs font-bold border border-red-500/30 text-red-400 hover:bg-red-500 hover:text-white rounded transition ml-2">
-                Salir
+
+            <button 
+                onClick={logout} 
+                className="p-2 text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition" 
+                title="Cerrar Sesión"
+            >
+                <FaSignOutAlt />
             </button>
           </div>
         ) : (
@@ -78,59 +77,45 @@ const Navbar = () => {
         )}
       </div>
 
-      {/* Menú Móvil (Hamburguesa) */}
-      <button className="md:hidden text-white text-2xl" onClick={() => setIsOpen(!isOpen)}>
+      {/* --- BOTÓN MÓVIL --- */}
+      <button className="md:hidden text-white text-2xl p-2" onClick={() => setIsOpen(!isOpen)}>
         {isOpen ? <FaTimes /> : <FaBars />}
       </button>
 
-      {/* Desplegable Móvil (Con Panel de Admin) */}
+      {/* --- MENÚ MÓVIL DESPLEGABLE --- */}
       {isOpen && (
-        <div className="absolute top-[70px] left-0 w-full md:hidden bg-slate-950/95 backdrop-blur-xl border-b border-slate-800 shadow-2xl flex flex-col items-center py-6 gap-6 animate-fade-in-down z-40 overflow-y-auto max-h-[85vh]">
+        <div className="absolute top-[70px] left-0 w-full md:hidden bg-slate-950/95 backdrop-blur-xl border-b border-slate-800 shadow-2xl flex flex-col items-center py-8 gap-6 animate-fade-in-down z-40 h-screen">
              
-             {/* Enlaces Principales */}
-             <Link to="/" className="text-xl font-medium text-slate-200 hover:text-blue-400 transition" onClick={() => setIsOpen(false)}>Inicio</Link>
-             <Link to="/about" className="text-xl font-medium text-slate-200 hover:text-purple-400 transition" onClick={() => setIsOpen(false)}>Nosotros</Link>
-             <Link to="/blog" className="text-xl font-medium text-slate-200 hover:text-cyan-400 transition" onClick={() => setIsOpen(false)}>Blog</Link>
+             <Link to="/" className="text-xl font-medium text-slate-200 hover:text-blue-400" onClick={() => setIsOpen(false)}>Inicio</Link>
+             <Link to="/projects" className="text-xl font-medium text-slate-200 hover:text-green-400" onClick={() => setIsOpen(false)}>Proyectos</Link>
+             <Link to="/about" className="text-xl font-medium text-slate-200 hover:text-purple-400" onClick={() => setIsOpen(false)}>Nosotros</Link>
+             <Link to="/blog" className="text-xl font-medium text-slate-200 hover:text-cyan-400" onClick={() => setIsOpen(false)}>Blog</Link>
 
-             {/* --- SECCIÓN ADMIN (Solo visible para ti) --- */}
+             <div className="w-1/3 h-[1px] bg-slate-800 my-2"></div>
+
+             {/* Sección Admin Móvil Limpia */}
              {user && user.role === 'admin' && (
-                <div className="w-full px-8">
-                    <div className="border border-blue-500/30 bg-blue-900/10 rounded-xl p-4">
-                        <p className="text-xs text-blue-400 font-bold uppercase text-center mb-3 tracking-wider">Panel de Administración</p>
-                        <div className="grid grid-cols-2 gap-3">
-                            <Link to="/admin/users" onClick={() => setIsOpen(false)} className="flex items-center justify-center gap-2 p-3 bg-slate-800 rounded-lg text-sm text-white border border-slate-700 hover:bg-blue-600 transition">
-                                 Usuarios
-                            </Link>
-                            <Link to="/admin/messages" onClick={() => setIsOpen(false)} className="flex items-center justify-center gap-2 p-3 bg-slate-800 rounded-lg text-sm text-white border border-slate-700 hover:bg-blue-600 transition">
-                                 Mensajes
-                            </Link>
-                            <Link to="/admin/new" onClick={() => setIsOpen(false)} className="flex items-center justify-center gap-2 p-3 bg-green-900/30 text-green-400 border border-green-500/30 rounded-lg text-sm font-bold hover:bg-green-600 hover:text-white transition">
-                                + Proyecto
-                            </Link>
-                            <Link to="/admin/blog/new" onClick={() => setIsOpen(false)} className="flex items-center justify-center gap-2 p-3 bg-purple-900/30 text-purple-400 border border-purple-500/30 rounded-lg text-sm font-bold hover:bg-purple-600 hover:text-white transition">
-                                + Blog
-                            </Link>
-                        </div>
-                    </div>
-                </div>
+                <Link 
+                    to="/admin" 
+                    onClick={() => setIsOpen(false)}
+                    className="w-3/4 py-3 bg-blue-900/30 border border-blue-500/30 text-blue-400 rounded-xl flex items-center justify-center gap-2 font-bold"
+                >
+                    <FaChartPie /> Ir al Dashboard
+                </Link>
              )}
 
-             <div className="w-1/3 h-[1px] bg-slate-800"></div>
-
-             {/* Botones de Auth */}
-             {!user && (
-                 <div className="flex flex-col gap-4 w-full px-10 max-w-sm">
+             {/* Botones Auth Móvil */}
+             {!user ? (
+                 <div className="flex flex-col gap-4 w-3/4">
                     <Link to="/login" className="w-full text-center py-3 border border-slate-700 text-slate-300 rounded-xl font-bold" onClick={() => setIsOpen(false)}>Entrar</Link>
                     <Link to="/register" className="w-full text-center py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-bold" onClick={() => setIsOpen(false)}>Registrarse</Link>
                  </div>
-             )}
-             
-             {user && (
+             ) : (
                  <button 
                     onClick={() => { logout(); setIsOpen(false); }} 
-                    className="text-red-400 font-bold mt-2 border border-red-500/30 px-6 py-2 rounded-lg hover:bg-red-500 hover:text-white transition"
+                    className="flex items-center gap-2 text-red-400 font-bold border border-red-500/30 px-8 py-3 rounded-xl hover:bg-red-500 hover:text-white transition"
                  >
-                    Cerrar Sesión
+                    <FaSignOutAlt /> Cerrar Sesión
                  </button>
              )}
         </div>

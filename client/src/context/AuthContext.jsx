@@ -4,47 +4,57 @@ import api from '../api';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
 
-  // Función para iniciar sesión
-  const login = async (email, password) => {
-    try {
-      const { data } = await api.post('/api/users/login', { email, password });
-      setUser(data); // Guardamos al usuario en el estado
-      localStorage.setItem('userInfo', JSON.stringify(data)); // Persistencia básica visual
-      return { success: true };
-    } catch (error) {
-      return { 
-        success: false, 
-        message: error.response?.data?.message || 'Error al conectar con el servidor' 
-      };
-    }
-  };
+    // 1. Cargar usuario si existe cookie/token al iniciar
+    useEffect(() => {
+        const checkUserLoggedIn = async () => {
+            try {
+                const { data } = await api.get('/api/users/profile');
+                setUser(data);
+            } catch (error) {
+                setUser(null);
+            } finally {
+                setLoading(false);
+            }
+        };
+        checkUserLoggedIn();
+    }, []);
 
-  // Función para cerrar sesión
-  const logout = async () => {
-    try {
-      await api.post('/api/users/logout');
-      setUser(null);
-      localStorage.removeItem('userInfo');
-    } catch (error) {
-      console.error(error);
-    }
-  };
+    // 2. FUNCIÓN DE LOGIN (Corregida)
+    const login = async (userData) => {
+        // userData ya viene como { email: '...', password: '...' }
+        // NO debemos poner llaves extras aquí como { userData } o { email: userData }
+        const { data } = await api.post('/api/users/login', userData);
+        setUser(data);
+        return data;
+    };
 
-  // Al cargar la app, revisamos si ya había una sesión guardada visualmente
-  useEffect(() => {
-    const storedUser = localStorage.getItem('userInfo');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
+    // 3. FUNCIÓN DE REGISTRO (Corregida)
+    const register = async (userData) => {
+        // userData viene como { name: '...', email: '...', password: '...' }
+        const { data } = await api.post('/api/users/register', userData);
+        setUser(data);
+        return data;
+    };
 
-  return (
-    <AuthContext.Provider value={{ user, login, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
+    // 4. FUNCIÓN DE LOGOUT
+    const logout = async () => {
+        try {
+            await api.post('/api/users/logout');
+            setUser(null);
+            window.location.href = '/login';
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    return (
+        <AuthContext.Provider value={{ user, login, register, logout, loading }}>
+            {children}
+        </AuthContext.Provider>
+    );
 };
 
 export default AuthContext;
